@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JDY 热招岗位筛选 · 金融/语言/出海方向</title>
+<style>
+  :root {
+    --primary: #e1251b;
+    --primary-dark: #b71c13;
+    --accent: #ff6f61;
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --text: #2c2f36;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --tag-blue: #eaf3ff;
+    --tag-blue-text: #1d6fd6;
+    --tag-green: #e8f8f0;
+    --tag-green-text: #137a4d;
+    --tag-orange: #fff1e6;
+    --tag-orange-text: #c05c14;
+    --tag-red: #fdecec;
+    --tag-red-text: #c0261f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding-bottom: 60px;
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 56px 24px 80px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 34px; letter-spacing: 1px; margin-bottom: 12px; }
+  .hero p { font-size: 16px; opacity: .92; max-width: 720px; margin: 0 auto; }
+  .hero .meta { margin-top: 18px; font-size: 13px; opacity: .8; }
+  .container { max-width: 1080px; margin: -48px auto 0; padding: 0 20px; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .summary-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.07);
+    text-align: center;
+  }
+  .summary-card .num { font-size: 30px; font-weight: 700; color: var(--primary); }
+  .summary-card .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  section { margin-top: 48px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-title .icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    background: var(--tag-red);
+  }
+  .section-title h2 { font-size: 24px; }
+  .section-title .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--line);
+  }
+  .card-header h3 { font-size: 18px; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .tag.blue { background: var(--tag-blue); color: var(--tag-blue-text); }
+  .tag.green { background: var(--tag-green); color: var(--tag-green-text); }
+  .tag.orange { background: var(--tag-orange); color: var(--tag-orange-text); }
+  .tag.red { background: var(--tag-red); color: var(--tag-red-text); }
+  .card-body { padding: 20px 24px; }
+  .card-body p { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .card-body ul { margin: 0 0 12px 18px; font-size: 14px; }
+  .card-body li { margin-bottom: 6px; }
+  .card-footer {
+    padding: 14px 24px;
+    background: #fafbfc;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .card-footer .city { font-size: 13px; color: var(--muted); }
+  .btn {
+    display: inline-block;
+    padding: 8px 22px;
+    background: var(--primary);
+    color: #fff !important;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background .2s;
+  }
+  .btn:hover { background: var(--primary-dark); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    font-size: 14px;
+  }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line); }
+  th { background: #fafbfc; color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  .note {
+    background: var(--card);
+    border-left: 4px solid var(--primary);
+    padding: 18px 22px;
+    border-radius: 0 12px 12px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  .note strong { color: var(--primary); }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .info-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  }
+  .info-card h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--primary);
+  }
+  .info-card ul { margin-left: 18px; font-size: 14px; }
+  .info-card li { margin-bottom: 6px; }
+  footer {
+    margin-top: 56px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 26px; }
+    .summary-card .num { font-size: 24px; }
+    .card-header { padding: 14px 18px; }
+    .card-body { padding: 16px 18px; }
+    .card-footer { padding: 12px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>JDY 热招岗位筛选报告</h1>
+  <p>金融 / 语言 / 出海业务方向 · 基于京东校招官网 78 个 JD YOUNG 实习生计划在招岗位逐一核实</p>
+  <div class="meta">岗位信息来自京东校招官网 · 数据核实时间：2026-10-06</div>
+</div>
+
+<div class="container">
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="num">78</div>
+      <div class="label">JDY 在招岗位（官网全量）</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">10+</div>
+      <div class="label">金融背景可投</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">5</div>
+      <div class="label">国际事业群 HC 岗位</div>
+    </div>
+    <div class="summary-card">
+      <div class="num">100%</div>
+      <div class="label">岗位支持远程面试</div>
+    </div>
+  </div>
+
+  <!-- 金融方向 -->
+  <section>
+    <div class="section-title">
+      <div class="icon">💰</div>
+      <div>
+        <h2>金融背景推荐</h2>
+        <div class="sub">JD 明确写了金融/财务/会计/经济相关专业，或金融背景是天然加分项</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>资金管理</h3>
+        <div class="tags">
+          <span class="tag red">强匹配</span>
+          <span class="tag blue">职能方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>现金流管理、外汇交易、拓展金融渠道、投存管理与资金风险评估。</p>
+        <ul>
+          <li>财务管理、<strong>金融学、经济学、会计学</strong>等相关专业</li>
+          <li>熟悉会计法规和最新会计准则，掌握税收与企业核算方法</li>
+          <li>了解 AI 工具辅助资金分析者优先</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 北京</span>
+        <a class="btn" href="http://campus.jd.com/api/wx/position/index?type=present#/details?type=present&id=4982" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>会计</h3>
+        <div class="tags">
+          <span class="tag red">强匹配</span>
+          <span class="tag blue">职能方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>会计学、财务管理、<strong>金融学、经济学</strong>等相关专业</li>
+          <li>熟悉会计法规、最新会计准则、税收与企业财务分析方法</li>
+          <li>熟练掌握办公软件、财务系统操作</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 北京、南京</span>
+        <a class="btn" href="http://campus.jd.com/api/wx/position/index?type=present#/details?type=present&id=4976" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>财务经营分析</h3>
+        <div class="tags">
+          <span class="tag red">强匹配</span>
+          <span class="tag blue">职能方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>财务管理、<strong>金融学、经济学、会计学</strong>等相关专业</li>
+          <li>掌握企业会计核算、财务分析方法</li>
+          <li>有使用 AI 工具提升财务分析效率经历者优先</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 北京</span>
+        <a class="btn" href="http://campus.jd.com/api/wx/position/index?type=present#/details?type=present&id=4974" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>金融产品经理</h3>
+        <div class="tags">
+          <span class="tag red">强匹配</span>
+          <span class="tag blue">保险及金融方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>金融学、经济学</strong>背景最佳（不做硬性要求）</li>
+          <li>具备项目管理能力和跨部门沟通协作能力</li>
+          <li>有创新意识、商务沟通能力，对 AI 工具有兴趣</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 上海、北京、天津、深圳</span>
+        <a class="btn" href="http://campus.jd.com/api/wx/position/index?type=present#/details?type=present&id=9122" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>商务拓展（金融）</h3>
+        <div class="tags">
+          <span class="tag orange">加分可投</span>
+          <span class="tag blue">保险及金融方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>金融业务线商务拓展，<strong>不限专业</strong>，重沟通谈判，金融背景是天然加分项。</p>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 北京、天津</span>
+        <a class="btn" href="https://campus.jd.com/#/details?id=6744" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>风控 / 商业分析 / 数据分析</h3>
+        <div class="tags">
+          <span class="tag orange">加分可投</span>
+          <span class="tag blue">职能 / 市场与商务方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>风控：不限专业，要求对互联网风控有热情（北京/天津/宿迁/深圳）</li>
+          <li>商业分析 / 数据分析：专业列表含"经济"，但要求 SQL、Python、Power BI 等数据技能</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 多城市</span>
+        <a class="btn" href="http://campus.jd.com/api/wx/position/index?type=present#/details?type=present&id=4972" target="_blank">查看风控岗位</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 语言与出海 -->
+  <section>
+    <div class="section-title">
+      <div class="icon">🌏</div>
+      <div>
+        <h2>语言背景 · 出海业务方向</h2>
+        <div class="sub">Joybuy 等出海电商归国际事业群体系；JD 标到"国际事业群"，具体业务线入职后分配</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>采销（电商运营）</h3>
+        <div class="tags">
+          <span class="tag green">国际事业群 HC</span>
+          <span class="tag blue">采销与物流方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>出海电商的商家运营、选品与渠道管理，外语能力是直接生产力。</p>
+        <ul>
+          <li><strong>不限专业</strong>，明确要求"语言表达和沟通协调能力突出"</li>
+          <li>具备生意头脑，social 达人更有优势</li>
+          <li>具备数据敏感度，熟练使用 Excel 与 AI 工具</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 国际事业群：上海、北京、广州、深圳、杭州</span>
+        <a class="btn" href="https://campus.jd.com/#/details?id=4858" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>内容运营</h3>
+        <div class="tags">
+          <span class="tag green">国际事业群 HC</span>
+          <span class="tag blue">运营方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>面向用户做 PGC/UGC、MCN 内容合作与专题策划，<strong>语言专业最对口的岗位</strong>。</p>
+        <ul>
+          <li>对内容媒体与渠道如数家珍，热爱互联网、新媒体行业</li>
+          <li>具备行业市场分析、营销、策划、推广能力</li>
+          <li>有 AIGC 实践经历者优先</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 国际事业群：北京</span>
+        <a class="btn" href="https://campus.jd.com/#/details?id=4926" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>市场营销</h3>
+        <div class="tags">
+          <span class="tag green">国际事业群 HC</span>
+          <span class="tag blue">市场与商务方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>市场营销、<strong>新闻传播</strong>、广告、商科等相关学科背景优先</li>
+          <li>有逻辑、有创意、有表达能力，善于沟通协作</li>
+          <li>有 AIGC 营销实践经历者优先</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 国际事业群：上海、深圳、南京 · 另有香港 HC（京东零售）</span>
+        <a class="btn" href="https://campus.jd.com/#/details?id=4944" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>平台运营</h3>
+        <div class="tags">
+          <span class="tag green">国际事业群 HC</span>
+          <span class="tag blue">运营方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>专业优先列表明确包含<strong>国际贸易</strong>（市场营销类、经济类、管理类亦可）</li>
+          <li>有较好的数据分析、沟通和表达能力</li>
+          <li>有知名电商实习经验者优先</li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 国际事业群：北京</span>
+        <a class="btn" href="https://campus.jd.com/#/details?id=4922" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>法务</h3>
+        <div class="tags">
+          <span class="tag orange">双背景推荐</span>
+          <span class="tag blue">职能方向</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>全部 JDY 岗位中<strong>唯一硬性语言要求</strong>的岗位，适合法律 + 语言双背景。</p>
+        <ul>
+          <li>熟悉合同法、公司法等法律法规，通过司法考试优先</li>
+          <li><strong>英语流利，可作为工作语言</strong></li>
+        </ul>
+      </div>
+      <div class="card-footer">
+        <span class="city">📍 北京</span>
+        <a class="btn" href="https://campus.jd.com/#/details?id=4968" target="_blank">查看岗位</a>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>预期管理：</strong>JDY 国际事业群岗位的工作地都在国内（是"做出海业务"而非"驻海外办公"）。如目标为海外工作地，需看 JDS 应届项目：JDS 采销（电商运营）有日本、香港工作地 HC。
+    </div>
+  </section>
+
+  <!-- 申请要求 -->
+  <section>
+    <div class="section-title">
+      <div class="icon">📋</div>
+      <div>
+        <h2>JDY 实习申请要求</h2>
+        <div class="sub">门槛不高：在校生身份 + 27届优先 + 软素质；无硬性专业/成绩/证书要求</div>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h4>🎓 身份 / 学历（硬性）</h4>
+        <ul>
+          <li>统招本科 / 硕士 / 博士<strong>在校生</strong></li>
+          <li>毕业时间：2026年10月及之后毕业（国内外高校均可，以毕业证注明时间为准）</li>
+          <li>全部 78 个岗位均标注"<strong>27届优先</strong>"，但非排他条件</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>💼 通用软性要求</h4>
+        <ul>
+          <li>对零售、物流、科技、健康等业务有长期投入的初心，积极抗压</li>
+          <li>开朗乐观，快速适应多元化工作环境</li>
+          <li>责任感强，擅长多任务、跨部门协同</li>
+          <li>有好奇心，愿意学新知识新技能</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>⏱️ 实习时长 / 出勤</h4>
+        <ul>
+          <li>78 个岗位 JD 中<strong>均未写明</strong>每周出勤天数或最短实习时长</li>
+          <li>官网 JDY 项目页亦无硬性要求</li>
+          <li>通常由部门 HR 在面试通过后按团队安排沟通</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>🔄 转正 / 留用路径</h4>
+        <ul>
+          <li>表现优异可优先向 <strong>JDS / TET / TGT</strong> 应届生项目转化</li>
+          <li>官方口径"应届高留用率"</li>
+          <li>非应届表现优异可获得 <strong>JDS / TET 终面直通卡</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 招聘流程 -->
+  <section>
+    <div class="section-title">
+      <div class="icon">🗓️</div>
+      <div>
+        <h2>招聘流程</h2>
+        <div class="sub">全年开放 · 78 个岗位全部支持远程面试</div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>环节</th><th>时间</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>网申 / 内推</td><td>全年开放</td></tr>
+        <tr><td>测评 / 笔试 / AI 面试</td><td>简历筛选通过后发送</td></tr>
+        <tr><td>面试</td><td>全年开放（全部远程面试）</td></tr>
+        <tr><td>Offer 发放</td><td>审批通过后随时发放</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 投递建议 -->
+  <section>
+    <div class="section-title">
+      <div class="icon">🚀</div>
+      <div>
+        <h2>投递建议</h2>
+        <div class="sub">按背景定制投递组合</div>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <h4>金融背景</h4>
+        <ul>
+          <li>强专业对口：资金管理 / 会计 / 财务经营分析</li>
+          <li>想偏业务：金融产品经理 / 商务拓展（金融）</li>
+          <li>有数据能力加分：商业分析 / 数据分析 / 风控</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>语言背景</h4>
+        <ul>
+          <li>首选组合：采销（电商运营）+ 内容运营 双投</li>
+          <li>简历突出外语等级、留学/交换、海外社媒与跨境电商内容经验</li>
+          <li>面试明确表达"想做国际事业群出海电商方向"</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>金融 + 语言双背景</h4>
+        <ul>
+          <li>首推商务拓展（金融）：金融业务线 + 不限专业 + 重沟通表达</li>
+          <li>次选金融产品经理：专业不硬性要求，商务沟通是明确加分点</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>时机建议</h4>
+        <ul>
+          <li>JDY 全年开放、远程面试，可现在就投</li>
+          <li>27 届投 JDY → 表现优异转 JDS/TET 是顺路径</li>
+          <li>2026.10–2027.9 毕业的应届生可直接投 JDS，不必绕 JDY</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>岗位数据基于京东校招官网核实（2026-10-06），岗位信息可能随批次更新，投递前请以官网最新状态为准。</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
